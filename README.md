@@ -1,7 +1,7 @@
 # Event Correlation using Agentic AI in SOC
 
 A lightweight SOC triage assistant that correlates fragmented authentication and network/IDS events into structured, investigation-ready incidents with MITRE ATT&CK mapping, severity scoring, and AI-assisted analyst reporting.
-
+![SOC Dashboard](docs/Dashboard.png)
 ## Architecture
 
 ```
@@ -86,6 +86,26 @@ Logs from triage experiments are written under `./experiments/logs` (mounted as 
 - **Export** — JSON and CSV download of incident data
 - **Streamlit UI** — Upload, detections, incidents, **evidence triage** (pack → LLM JSON → verifier → decision), Neo4j graph tab, report, chatbot, export
 - **Synthetic live feed** — Time-windowed demo events when no SIEM is available
+
+## Screenshots
+
+### Dashboard
+![Dashboard](docs/Dashboard.png)
+
+### Incidents & Triage
+![Incidents](docs/Incidents.png)
+
+### Detections
+![Detections](docs/Detections.png)
+
+### Evidence Triage
+![Evidence Triage](docs/Evidence-traige.png)
+
+### Knowledge Graph
+![Knowledge Graph](docs/Knowledge-graph.png)
+
+### AI Chatbot
+![AI Chatbot](docs/AI-Chatbot.png)
 
 ## Project Structure
 
