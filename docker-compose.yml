@@ -1,0 +1,48 @@
+# SOC UI + Neo4j (knowledge graph). Default dev password: socgraph-dev (override NEO4J_PASSWORD in .env)
+services:
+  neo4j:
+    image: neo4j:5
+    hostname: neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      # Allow Neo4j username to come from host .env (matches app config).
+      NEO4J_AUTH: ${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:-socgraph-dev}
+      # Used only by healthcheck (Neo4j does not read this key).
+      _HEALTHCHECK_PASSWORD: ${NEO4J_PASSWORD:-socgraph-dev}
+    volumes:
+      - neo4j_data:/data
+    restart: unless-stopped
+    healthcheck:
+      # Password must match NEO4J_AUTH (compose substitutes ${NEO4J_PASSWORD} from host .env).
+      test:
+        - CMD-SHELL
+        - cypher-shell -u "${NEO4J_USER:-neo4j}" -p "$$_HEALTHCHECK_PASSWORD" -a bolt://127.0.0.1:7687 "RETURN 1" || exit 1
+      interval: 5s
+      timeout: 10s
+      retries: 24
+      start_period: 35s
+
+  soc-triage:
+    build: .
+    depends_on:
+      neo4j:
+        condition: service_healthy
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    environment:
+      # Inside the stack, Bolt host is the neo4j service name (not localhost).
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USER: ${NEO4J_USER:-neo4j}
+      NEO4J_PASSWORD: ${NEO4J_PASSWORD:-socgraph-dev}
+      # Browser runs on your machine → localhost still correct for the link in Streamlit.
+      NEO4J_BROWSER_URL: http://localhost:7474
+    volumes:
+      - ./experiments/logs:/app/experiments/logs
+    restart: unless-stopped
+
+volumes:
+  neo4j_data:

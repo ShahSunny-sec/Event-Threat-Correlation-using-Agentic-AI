@@ -1,0 +1,10 @@
+__pycache__
+*.pyc
+.git
+.env
+*.md
+.pytest_cache
+.mypy_cache
+.cursor
+terminals
+experiments/logs/*.jsonl

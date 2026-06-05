@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Sample log structure — SOC Triage Assistant</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+      background: #f6f8fa;
+      color: #1f2328;
+      line-height: 1.45;
+    }
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      border-bottom: 2px solid #0969da;
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+    }
+    .subtitle { color: #656d76; font-size: 0.95rem; margin-bottom: 28px; }
+    h2 {
+      font-size: 1.15rem;
+      margin: 28px 0 10px;
+      color: #0969da;
+    }
+    .schema {
+      background: #fff;
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 12px;
+      font-family: ui-monospace, monospace;
+      font-size: 0.88rem;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 0.82rem;
+    }
+    th {
+      background: #f6f8fa;
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid #d0d7de;
+      font-weight: 600;
+    }
+    td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #eaeef2;
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    .muted { color: #656d76; font-size: 0.85rem; margin-top: 6px; }
+    code { background: #eff1f3; padding: 1px 6px; border-radius: 4px; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <h1>Sample log structure (batch CSV)</h1>
+  <p class="subtitle">MVP formats for authentication and network/IDS logs — <code>event_correlation_soc</code></p>
+
+  <h2>1. Linux-style authentication</h2>
+  <p class="muted">File: <code>auth_linux_sample.csv</code> — header + comma-separated rows.</p>
+  <div class="schema">timestamp, host, user, src_ip, event_type, status</div>
+  <table>
+    <thead><tr><th>timestamp</th><th>host</th><th>user</th><th>src_ip</th><th>event_type</th><th>status</th></tr></thead>
+    <tbody>
+      <tr><td>2024-03-15 10:00:12</td><td>linux-web-01</td><td>admin</td><td>192.168.1.100</td><td>sshd_login</td><td>failed</td></tr>
+      <tr><td>2024-03-15 10:05:30</td><td>linux-web-01</td><td>admin</td><td>192.168.1.100</td><td>sshd_login</td><td>success</td></tr>
+      <tr><td>2024-03-15 11:00:00</td><td>linux-db-01</td><td>dbadmin</td><td>10.0.0.20</td><td>sshd_login</td><td>failed</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Windows-style authentication</h2>
+  <p class="muted">File: <code>auth_windows_sample.csv</code></p>
+  <div class="schema">timestamp, host, user, src_ip, event_type, logon_type, status, event_id_code</div>
+  <table>
+    <thead><tr><th>timestamp</th><th>host</th><th>user</th><th>src_ip</th><th>event_type</th><th>logon_type</th><th>status</th><th>event_id_code</th></tr></thead>
+    <tbody>
+      <tr><td>2024-03-15 14:00:05</td><td>WIN-DC-01</td><td>jsmith</td><td>10.0.0.55</td><td>logon</td><td>3</td><td>failure</td><td>4625</td></tr>
+      <tr><td>2024-03-15 14:04:00</td><td>WIN-DC-01</td><td>jsmith</td><td>10.0.0.55</td><td>logon</td><td>10</td><td>success</td><td>4624</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Network / IDS</h2>
+  <p class="muted">File: <code>network_ids_sample.csv</code> — empty <code>alert_name</code> means no IDS signature on that row.</p>
+  <div class="schema">timestamp, src_ip, dst_ip, src_port, dst_port, protocol, direction, host, alert_name, action</div>
+  <table>
+    <thead><tr><th>timestamp</th><th>src_ip</th><th>dst_ip</th><th>ports</th><th>proto</th><th>direction</th><th>host</th><th>alert_name</th><th>action</th></tr></thead>
+    <tbody>
+      <tr><td>2024-03-15 10:12:00</td><td>192.168.1.100</td><td>203.0.113.50</td><td>49152 → 443</td><td>tcp</td><td>outbound</td><td>linux-web-01</td><td>(empty)</td><td>allowed</td></tr>
+      <tr><td>2024-03-15 10:12:05</td><td>192.168.1.100</td><td>203.0.113.50</td><td>49152 → 443</td><td>tcp</td><td>outbound</td><td>linux-web-01</td><td>ET TROJAN Possible C2 Activity</td><td>blocked</td></tr>
+      <tr><td>2024-03-15 13:00:00</td><td>10.0.0.2</td><td>10.0.0.3</td><td>60000 → 445</td><td>tcp</td><td>inbound</td><td>WIN-DC-01</td><td>(empty)</td><td>allowed</td></tr>
+    </tbody>
+  </table>
+
+  <p class="muted" style="margin-top:24px;">Normalized into internal <code>Event</code> objects (shared schema) after parsing.</p>
+</body>
+</html>

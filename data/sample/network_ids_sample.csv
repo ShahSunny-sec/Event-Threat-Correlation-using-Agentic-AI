@@ -1,0 +1,11 @@
+timestamp,src_ip,dst_ip,src_port,dst_port,protocol,direction,host,alert_name,action
+2024-03-15 10:12:00,192.168.1.100,203.0.113.50,49152,443,tcp,outbound,linux-web-01,,allowed
+2024-03-15 10:12:05,192.168.1.100,203.0.113.50,49152,443,tcp,outbound,linux-web-01,ET TROJAN Possible C2 Activity,blocked
+2024-03-15 10:14:00,192.168.1.100,203.0.113.51,49200,8080,tcp,outbound,linux-web-01,,allowed
+2024-03-15 14:10:00,10.0.0.55,198.51.100.22,51000,8080,tcp,outbound,WIN-DC-01,,allowed
+2024-03-15 14:10:05,10.0.0.55,198.51.100.22,51000,8080,tcp,outbound,WIN-DC-01,ET POLICY Suspicious Outbound to Known Bad IP,blocked
+2024-03-15 14:12:00,10.0.0.55,198.51.100.23,51050,443,tcp,outbound,WIN-DC-01,,allowed
+2024-03-15 09:30:00,10.0.0.5,151.101.1.140,55000,443,tcp,outbound,linux-web-01,,allowed
+2024-03-15 09:45:00,10.0.0.10,8.8.8.8,55100,53,udp,outbound,linux-web-01,,allowed
+2024-03-15 13:00:00,10.0.0.2,10.0.0.3,60000,445,tcp,inbound,WIN-DC-01,,allowed
+2024-03-15 15:00:00,10.0.0.70,204.79.197.200,62000,443,tcp,outbound,WIN-WS-02,,allowed

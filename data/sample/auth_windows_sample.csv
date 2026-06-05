@@ -1,0 +1,11 @@
+timestamp,host,user,src_ip,event_type,logon_type,status,event_id_code
+2024-03-15 14:00:05,WIN-DC-01,jsmith,10.0.0.55,logon,3,failure,4625
+2024-03-15 14:00:32,WIN-DC-01,jsmith,10.0.0.55,logon,3,failure,4625
+2024-03-15 14:01:10,WIN-DC-01,jsmith,10.0.0.55,logon,3,failure,4625
+2024-03-15 14:01:48,WIN-DC-01,jsmith,10.0.0.55,logon,3,failure,4625
+2024-03-15 14:02:25,WIN-DC-01,jsmith,10.0.0.55,logon,3,failure,4625
+2024-03-15 14:02:59,WIN-DC-01,jsmith,10.0.0.55,logon,3,failure,4625
+2024-03-15 14:04:00,WIN-DC-01,jsmith,10.0.0.55,logon,10,success,4624
+2024-03-15 13:30:00,WIN-DC-01,svcaccount,10.0.0.2,logon,5,success,4624
+2024-03-15 14:30:00,WIN-WS-02,analyst1,10.0.0.70,logon,10,success,4624
+2024-03-15 15:00:00,WIN-DC-01,backup_svc,10.0.0.3,logon,5,success,4624

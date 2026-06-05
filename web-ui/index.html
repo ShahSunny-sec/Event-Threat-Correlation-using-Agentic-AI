@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SOC Triage Assistant</title>
+    <link rel="stylesheet" href="/web-ui/styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark"></div>
+          <div>
+            <div class="brand-title">SOC Triage</div>
+            <div class="brand-subtitle">Evidence-grounded incident workflow</div>
+          </div>
+        </div>
+        <nav class="nav">
+          <a href="#overview" class="active" data-tab="overview">Overview</a>
+          <a href="#sources" data-tab="sources">Data Sources</a>
+          <a href="#detections" data-tab="detections">Detections</a>
+          <a href="#incidents" data-tab="incidents">Incidents</a>
+          <a href="#graph" data-tab="graph">Knowledge Graph</a>
+          <a href="#evidence" data-tab="evidence">Evidence Triage</a>
+          <a href="#chat" data-tab="chat">Chatbot</a>
+        </nav>
+        <div class="sidebar-card">
+          <div class="tiny-label">Engine</div>
+          <strong>Agentic detection and verified triage</strong>
+          <p>The LLM finds suspicious patterns; evidence packs, verifier checks, and deferral policy keep decisions grounded.</p>
+        </div>
+      </aside>
+
+      <main class="main">
+        <section class="tab-panel active" id="overview" data-tab="overview">
+        <header class="hero">
+          <div>
+            <p class="eyebrow">Incident-level SOC workflow</p>
+            <h1>Agentic detection with evidence-backed triage</h1>
+            <p class="hero-text">
+              Generate or ingest security telemetry, run agentic detection, correlate incidents,
+              enrich with threat intelligence, and verify triage decisions.
+            </p>
+          </div>
+          <div class="run-card">
+            <label for="sourceSelect">Data source</label>
+            <select id="sourceSelect">
+              <option value="demo_reliable_attack">Reliable demo attack chain</option>
+            </select>
+            <div id="sourceHint" class="status-line">Loading data sources...</div>
+            <div class="grid-two">
+              <label>Window minutes<input id="windowMinutes" type="number" min="10" max="240" value="60" /></label>
+              <label>Noise events<input id="noiseEvents" type="number" min="0" max="50" value="8" /></label>
+            </div>
+            <label>Seed<input id="seed" type="number" min="0" value="4" /></label>
+            <button id="runAnalysis" class="primary-btn">Run Agentic Analysis</button>
+            <div id="runStatus" class="status-line">Ready.</div>
+          </div>
+        </header>
+
+        <section class="metrics">
+          <div class="metric"><span>Source</span><strong id="mSource">None</strong></div>
+          <div class="metric"><span>Events</span><strong id="mEvents">0</strong></div>
+          <div class="metric"><span>Detections</span><strong id="mDetections">0</strong></div>
+          <div class="metric"><span>Incidents</span><strong id="mIncidents">0</strong></div>
+          <div class="metric"><span>Max Severity</span><strong id="mSeverity">None</strong></div>
+          <div class="metric"><span>Detector Status</span><strong id="mStatus">Idle</strong></div>
+          <div class="metric"><span>Threat Intel</span><strong id="mIntel">Checking</strong></div>
+          <div class="metric"><span>Neo4j</span><strong id="mNeo4j">Checking</strong></div>
+        </section>
+        <section class="overview-grid">
+          <article class="overview-card">
+            <span>Pipeline</span>
+            <strong>Logs to final decision</strong>
+            <p>Telemetry is normalized, analyzed by the agentic detector, correlated into incidents, enriched, stored as a knowledge graph, and triaged with verifier-backed evidence.</p>
+          </article>
+          <article class="overview-card">
+            <span>Evidence grounding</span>
+            <strong>Evidence Pack first</strong>
+            <p>Each incident becomes a structured pack with timeline, entities, detections, enrichment, MITRE context, coverage, and conflicts before the LLM triage step.</p>
+          </article>
+          <article class="overview-card">
+            <span>External enrichment</span>
+            <strong>VirusTotal and AbuseIPDB</strong>
+            <p>Public IPs are enriched when API keys are configured. Results are shown in incident details and used in the evidence pack.</p>
+          </article>
+        </section>
+        </section>
+
+        <section class="panel tab-panel" id="sources" data-tab="sources">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Source readiness</p>
+              <h2>Data sources</h2>
+            </div>
+          </div>
+          <div id="integrationStatus" class="integration-grid"></div>
+          <div id="sourceCards" class="source-grid"></div>
+        </section>
+
+        <section class="tab-panel" id="detections" data-tab="detections">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Agentic output</p>
+                <h2>Detections</h2>
+              </div>
+            </div>
+            <div id="detectionsList" class="list empty">Run analysis to populate detections.</div>
+          </div>
+        </section>
+
+        <section class="tab-panel" id="incidents" data-tab="incidents">
+          <div class="split">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Correlated results</p>
+                <h2>Incidents</h2>
+              </div>
+            </div>
+            <div id="incidentsList" class="list empty">No incident selected.</div>
+          </div>
+
+          <div class="panel detail-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Incident details</p>
+              <h2 id="detailTitle">Select an incident</h2>
+            </div>
+            <button id="runEvidence" class="secondary-btn" disabled>Run Evidence Triage</button>
+          </div>
+          <div id="incidentDetail" class="detail-empty">Incident timeline, enrichment, and knowledge graph summary will appear here.</div>
+          </div>
+          </div>
+        </section>
+
+        <section class="panel tab-panel" id="graph" data-tab="graph">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Neo4j knowledge graph</p>
+              <h2>Incident graph</h2>
+            </div>
+            <div class="graph-actions">
+              <a id="openNeo4j" class="link-btn" href="http://localhost:7474" target="_blank" rel="noreferrer">Open Neo4j Browser</a>
+              <button id="syncNeo4j" class="secondary-btn" disabled>Sync selected incident</button>
+              <button id="fetchNeo4j" class="secondary-btn" disabled>Fetch from Neo4j</button>
+            </div>
+          </div>
+          <div id="neo4jStatus" class="status-line">Checking Neo4j status...</div>
+          <p class="graph-note">
+            The knowledge graph stores incident entities and relationships in Neo4j as the project memory layer.
+            Instead of embedding raw logs into a vector database, the system uses graph relationships for investigation context.
+          </p>
+          <div id="graphSource" class="status-line">Run analysis and select an incident.</div>
+          <div class="graph-layout">
+            <div class="graph-card">
+              <svg id="graphSvg" viewBox="0 0 760 460" role="img" aria-label="Incident knowledge graph"></svg>
+            </div>
+            <div>
+              <h3>Cypher</h3>
+              <pre id="cypherBox" class="json-box">Select an incident to view the Neo4j query.</pre>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel tab-panel" id="evidence" data-tab="evidence">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Verifier-backed decision</p>
+              <h2>Evidence triage</h2>
+            </div>
+            <button id="runEvidencePanel" class="secondary-btn" disabled>Run Evidence Triage</button>
+          </div>
+          <pre id="evidenceOutput" class="json-box">Run evidence triage for a selected incident.</pre>
+        </section>
+
+        <section class="panel tab-panel" id="chat" data-tab="chat">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Incident assistant</p>
+              <h2>Chatbot</h2>
+            </div>
+          </div>
+          <div class="chat-select-row">
+            <label for="chatIncidentSelect">Chat incident
+              <select id="chatIncidentSelect" disabled>
+                <option value="">Run analysis to load incidents</option>
+              </select>
+            </label>
+          </div>
+          <div id="chatContext" class="status-line">Run analysis and select an incident to chat with its evidence context.</div>
+          <div id="chatMessages" class="chat-messages">
+            <div class="chat-message assistant">Ask about severity, affected user, timeline, evidence, MITRE mapping, recommended actions, or why the final decision should defer/escalate/close.</div>
+          </div>
+          <div class="chat-input-row">
+            <input id="chatInput" type="text" placeholder="Ask about the selected incident..." disabled />
+            <button id="sendChat" class="primary-btn" disabled>Send</button>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="/web-ui/app.js"></script>
+  </body>
+</html>

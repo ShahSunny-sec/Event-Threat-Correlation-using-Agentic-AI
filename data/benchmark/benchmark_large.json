@@ -1,0 +1,62 @@
+{
+  "auth": "data/benchmark/auth_volume.csv",
+  "network": "data/benchmark/network_volume.csv",
+  "warmup": 1,
+  "runs": 5,
+  "wall_seconds_all_measured": 4.557749499988859,
+  "aggregate_stage_seconds": {
+    "parse_auth": {
+      "mean_s": 0.35352536699792836,
+      "stdev_s": 0.01428677993527931,
+      "min_s": 0.341078416997334,
+      "max_s": 0.3753229169960832,
+      "runs": 5.0
+    },
+    "parse_network": {
+      "mean_s": 0.5231991165986983,
+      "stdev_s": 0.04146692130235471,
+      "min_s": 0.48656104199471883,
+      "max_s": 0.5896272079990013,
+      "runs": 5.0
+    },
+    "detection": {
+      "mean_s": 0.02533611659600865,
+      "stdev_s": 0.0028155357288402465,
+      "min_s": 0.021629707989632152,
+      "max_s": 0.028171500001917593,
+      "runs": 5.0
+    },
+    "correlation": {
+      "mean_s": 9.295839990954846e-05,
+      "stdev_s": 6.3838626100136005e-06,
+      "min_s": 8.549999620299786e-05,
+      "max_s": 0.00010058299812953919,
+      "runs": 5.0
+    },
+    "triage_enrich": {
+      "mean_s": 0.0003979752043960616,
+      "stdev_s": 1.2661690338238056e-05,
+      "min_s": 0.0003843750018859282,
+      "max_s": 0.0004107500135432929,
+      "runs": 5.0
+    },
+    "build_context": {
+      "mean_s": 1.8658398767001926e-05,
+      "stdev_s": 2.2433326943914825e-06,
+      "min_s": 1.7250000382773578e-05,
+      "max_s": 2.2624997654929757e-05,
+      "runs": 5.0
+    },
+    "fallback_report_first_incident": {
+      "mean_s": 2.9750002431683244e-05,
+      "stdev_s": 4.192856588062081e-06,
+      "min_s": 2.6667010388337076e-05,
+      "max_s": 3.691599704325199e-05,
+      "runs": 5.0
+    }
+  },
+  "last_run_event_count": 35000,
+  "last_run_detection_count": 22,
+  "last_run_incident_count": 6,
+  "throughput_events_per_sec": 7679.228531556102
+}

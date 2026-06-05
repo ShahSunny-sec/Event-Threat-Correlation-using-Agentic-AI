@@ -1,0 +1,40 @@
+[
+  {
+    "scenario": "Linux Brute Force followed by Suspicious Outbound",
+    "expected_detections": [
+      "failed_login_burst",
+      "success_after_failures",
+      "suspicious_outbound"
+    ],
+    "affected_user": "admin",
+    "affected_host": "linux-web-01",
+    "primary_src_ip": "192.168.1.100",
+    "primary_dst_ip": "203.0.113.50",
+    "has_ids_alert": true,
+    "expected_severity": "critical",
+    "expected_mitre_tactics": [
+      "Credential Access",
+      "Initial Access",
+      "Command and Control"
+    ]
+  },
+  {
+    "scenario": "Windows Brute Force followed by Suspicious Outbound",
+    "expected_detections": [
+      "failed_login_burst",
+      "success_after_failures",
+      "suspicious_outbound"
+    ],
+    "affected_user": "jsmith",
+    "affected_host": "WIN-DC-01",
+    "primary_src_ip": "10.0.0.55",
+    "primary_dst_ip": "198.51.100.22",
+    "has_ids_alert": true,
+    "expected_severity": "critical",
+    "expected_mitre_tactics": [
+      "Credential Access",
+      "Initial Access",
+      "Command and Control"
+    ]
+  }
+]
